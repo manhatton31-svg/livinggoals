@@ -1,0 +1,68 @@
+# LivingGoals — Example goals.yaml
+# Drop this (or generate via CLI) into any project to inject living goals.
+
+version: "0.1"
+goals:
+  - id: citeforge-conversion-v1
+    name: "Double CiteForge affiliate conversion rate"
+    description: |
+      Increase overall affiliate conversion rate from current baseline to 2x 
+      within 30 days while keeping bounce rate under 45% and maintaining or 
+      improving average order value.
+    success_criteria:
+      - metric: conversion_rate
+        target: ">= 2.0x_baseline"
+        window: 7d
+      - metric: bounce_rate
+        target: "<= 0.45"
+      - metric: revenue_per_visitor
+        target: ">= 1.5x_baseline"
+    time_horizon: 30d
+    priority: high
+    agents:
+      - role: funnel-optimizer
+        initial_prompt_skill: "skills/funnel-optimizer.md"
+      - role: content-geo-specialist
+        initial_prompt_skill: "skills/geo-content.md"
+      - role: evaluator
+        initial_prompt_skill: "skills/goal-evaluator.md"
+    metrics:
+      - conversion_rate
+      - bounce_rate
+      - revenue_per_visitor
+      - agent_success_rate
+      - prompt_mutation_count
+    injection:
+      type: nextjs
+      path: "./apps/web"
+    evolution:
+      enabled: true
+      frequency: "after_every_run"
+      min_score_delta: 0.05
+      archive_every: true
+
+  - id: zero-proxy-crypto-trader
+    name: "Build a zero-proxy multi-chain portfolio tracker + trader that beats buy-and-hold"
+    description: "Fully local, stigmergic crypto agent suite with measurable alpha."
+    success_criteria:
+      - metric: monthly_alpha
+        target: "> 0.15"
+      - metric: max_drawdown
+        target: "< 0.08"
+      - metric: paid_proxy
+        target: "0"
+    time_horizon: 60d
+    priority: medium
+    agents:
+      - role: portfolio-tracker
+      - role: trader
+      - role: risk-manager
+
+# Global settings for the LivingGoals runtime
+runtime:
+  harness: "grok-build"
+  model: "grok-4.5"
+  zero_proxy: true
+  stigmergic_log: true
+  git_archive: true
+  dashboard_port: 3847
