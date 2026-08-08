@@ -10,6 +10,7 @@ import * as yaml from "yaml";
 import { LivingGoal } from "./core/LivingGoal";
 import { runEvolutionLoop } from "./evolution/loop";
 import { GrokBuildHarness } from "./harness/GrokBuildHarness";
+import { appendRun } from "./persist/store";
 
 const program = new Command();
 
@@ -106,6 +107,14 @@ program
       console.log(`  ${g.config.name}: score ${score.toFixed(2)}`);
       console.log(`    agent: ${output.slice(0, 160)}${output.length > 160 ? "…" : ""}`);
       await runEvolutionLoop(g, fakeMetrics);
+      appendRun({
+        goalId: g.config.id,
+        name: g.config.name,
+        score,
+        metrics: fakeMetrics,
+        at: new Date().toISOString(),
+      });
+      console.log("    persisted run → .livinggoals/runs.json");
     }
   });
 

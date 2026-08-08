@@ -30,7 +30,7 @@ export class GrokBuildHarness {
   }
 
   get hasKey(): boolean {
-    return !!getApiKey();
+    return process.env.LIVINGGOALS_USE_GROK === "1" && !!getApiKey();
   }
 
   async spawnAgent(
@@ -77,7 +77,7 @@ export class GrokBuildHarness {
             { role: "user", content: user },
           ],
           temperature: 0.6,
-          max_tokens: maxTokens,
+          max_tokens: Math.min(maxTokens, 400),
         }),
       });
 
