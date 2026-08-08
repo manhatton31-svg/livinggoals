@@ -1,6 +1,6 @@
 {
   "name": "livinggoals",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Living Goals — injectable self-evolving goals powered by open Grok Build harness",
   "main": "dist/index.js",
   "bin": {
