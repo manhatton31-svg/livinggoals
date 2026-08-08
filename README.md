@@ -38,15 +38,11 @@ User monitors simple metrics dashboard over time
 ## Quick Start (Local MVP)
 
 ```bash
-# Install (once Grok Build CLI is available)
-curl -fsSL https://x.ai/cli/install.sh | bash   # or your local build of the open harness
-
-# Create a new living goal
-npx livinggoals create "Double CiteForge affiliate conversion rate in 30 days" \
-  --metrics conversion_rate,bounce_rate,revenue \
-  --dir ./my-project
-
-# Or just drop a goals.yaml
+npm install
+npm run build
+npx livinggoals create "Double CiteForge affiliate conversion rate in 30 days"
+# or drop goals.example.yaml and:
+npx livinggoals run -f goals.example.yaml
 ```
 
 See `docs/` and `examples/` for injection patterns.
@@ -55,41 +51,37 @@ See `docs/` and `examples/` for injection patterns.
 
 ```
 livinggoals/
-├── core/                 # Living Goal runtime, goal object, metrics
-├── harness/              # Thin wrapper around open Grok Build (CLI/ACP)
-├── evolution/            # Meta-prompt editor loop (uses Grok Build to edit prompts)
-├── injection/            # CLI, MCP server, SDK stubs, file watcher
-├── dashboard/            # Simple local metrics viewer (or Vercel-hosted)
-├── prompts/              # Versioned system prompts + skills for the Living Goal itself
-├── examples/             # CiteForge, crypto trader, lead-gen, personal productivity
-└── docs/
+├── src/
+│   ├── core/LivingGoal.ts      # First-class goal object + scoring
+│   ├── harness/GrokBuildHarness.ts  # Thin Grok Build wrapper
+│   ├── evolution/loop.ts       # Meta-prompt evolution
+│   ├── cli.ts                  # CLI entry
+│   └── index.ts
+├── prompts/skills/             # Versioned skills (meta-evolution etc.)
+├── goals.example.yaml
+├── docs/
+└── package.json
 ```
 
 ## Product Roadmap (High Level)
-1. **MVP (this week)**: Local CLI + goals.yaml + Grok Build powered evolution loop + basic metrics board.
+1. **MVP (this week)** → Advanced Aug 7 2026: Core class, scoring, harness stub, evolution loop, CLI skeleton.
 2. **Injectable**: MCP server + simple JS SDK so it can be dropped into Next.js / CiteForge / any Node project.
 3. **Dashboard**: Multi-goal monitoring + prompt version history + alerts.
 4. **SaaS tier**: Hosted LivingGoals for non-technical users + team workspaces.
-5. **Marketplace**: Share / sell pre-tuned Living Goal templates (e.g. “Affiliate Funnel Optimizer”, “Crypto Alpha Agent”).
-
-## Why This Wins
-- Built directly on the newly open-sourced Grok Build harness → maximum leverage + transparency.
-- Closes the self-improvement loop at the *prompt + agent* layer (the highest ROI layer right now).
-- True “set and forget” for builders: create goal → inject → monitor metrics.
-- Perfectly aligned with CiteForge, LoopForge, crypto agents, and AI automation micro-businesses.
+5. **Marketplace**: Share / sell pre-tuned Living Goal templates.
 
 ## Status
 - Linear Project: [LivingGoals](https://linear.app/arclya2a/project/livinggoals-6540e90d49e9)
 - GitHub: https://github.com/manhatton31-svg/livinggoals
-- Current: Scaffolding MVP (July 16, 2026)
+- Current: **MVP core advanced August 7 2026** (LivingGoal class expanded, harness + evolution + CLI stubs live)
 
 Built with ❤️ + Grok Build by Christopher / manhatton31-svg
 
 ---
 
-**Next actions** (auto-managed by Project Manager + Archivist):
-- Scaffold core Living Goal class + goals.yaml schema
-- Wire Grok Build harness (headless + ACP)
-- Implement first meta-evolution skill
-- Create example for CiteForge funnel goal
-- Deploy simple local dashboard
+**Completed / advanced by team Aug 7 2026**:
+- Expanded LivingGoal core (scoring, recordRun, fromYAML)
+- GrokBuildHarness stub
+- Evolution loop
+- CLI skeleton (create / run / status)
+- README + architecture updated

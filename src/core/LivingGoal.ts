@@ -68,14 +68,19 @@ export class LivingGoal {
 
   /** Score current progress against success criteria (0-1) */
   score(metrics: Record<string, number>): number {
-    // Simple average for MVP; replace with weighted / LLM judge later
     let total = 0;
     let count = 0;
     for (const crit of this.config.success_criteria) {
       const val = metrics[crit.metric];
       if (val === undefined) continue;
-      // Very naive for now — real version will parse target strings
-      total += 0.5; // placeholder
+      // Basic numeric comparison for MVP; expand with target parser later
+      const targetNum = typeof crit.target === "number" ? crit.target : parseFloat(String(crit.target).replace(/[^0-9.-]/g, ""));
+      if (!isNaN(targetNum)) {
+        // Simple ratio or threshold logic
+        total += Math.min(1, Math.max(0, val / (targetNum || 1)));
+      } else {
+        total += 0.5; // fallback for string targets like ">= 2.0x_baseline"
+      }
       count++;
     }
     return count ? total / count : 0;
@@ -89,7 +94,24 @@ export class LivingGoal {
     return delta >= (this.config.evolution.min_score_delta || 0.05);
   }
 
+  /** Record a run and optionally archive prompt state */
+  recordRun(metrics: Record<string, number>, agentOutputs?: any) {
+    const score = this.score(metrics);
+    this.runHistory.push({
+      ts: new Date().toISOString(),
+      metrics,
+      score,
+      agentOutputs,
+    });
+    this.config.updated_at = new Date().toISOString();
+    return score;
+  }
+
   toJSON() {
     return this.config;
+  }
+
+  static fromYAML(yamlObj: any): LivingGoal {
+    return new LivingGoal(yamlObj as LivingGoalConfig);
   }
 }
